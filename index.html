@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SereniaApp — Frontend</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>SereniaApp</h1>
+      <span id="userBadge" class="badge">Invitado</span>
+    </div>
+    <div class="config-bar">
+      <label for="apiUrlInput">API Base:</label>
+      <input id="apiUrlInput" type="text" value="http://localhost:9191/serenia-api" />
+      <label class="checkbox-label">
+        <input id="demoModeToggle" type="checkbox" checked />
+        Modo Demo (sin SQL/Backend)
+      </label>
+      <button id="btnLogout" class="btn btn-secondary hidden" type="button">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Vista de Login / Registro -->
+    <section id="authSection" class="card auth-card">
+      <div class="tabs">
+        <button id="tabLogin" class="tab active" type="button">Iniciar sesión</button>
+        <button id="tabRegister" class="tab" type="button">Registrarse</button>
+      </div>
+
+      <form id="loginForm" class="form">
+        <h2>Bienvenido de nuevo</h2>
+        <div class="field">
+          <label for="loginEmail">Correo electrónico</label>
+          <input id="loginEmail" type="email" required placeholder="usuario@itm.edu.co" />
+        </div>
+        <div class="field">
+          <label for="loginPassword">Contraseña</label>
+          <input id="loginPassword" type="password" required placeholder="********" />
+        </div>
+        <button class="btn btn-primary" type="submit">Entrar</button>
+      </form>
+
+      <form id="registerForm" class="form hidden">
+        <h2>Crear cuenta</h2>
+        <div class="field">
+          <label for="regNombre">Nombre completo</label>
+          <input id="regNombre" type="text" required placeholder="Mateo Duque" />
+        </div>
+        <div class="field">
+          <label for="regEmail">Correo electrónico</label>
+          <input id="regEmail" type="email" required placeholder="usuario@itm.edu.co" />
+        </div>
+        <div class="field">
+          <label for="regPassword">Contraseña</label>
+          <input id="regPassword" type="password" required minlength="6" placeholder="Mínimo 6 caracteres" />
+        </div>
+        <button class="btn btn-primary" type="submit">Registrarme</button>
+      </form>
+    </section>
+
+    <!-- Vista Principal de la App -->
+    <section id="appSection" class="hidden">
+      <nav class="module-nav">
+        <button class="nav-btn active" data-module="citas" type="button">Citas</button>
+        <button class="nav-btn" data-module="habitos" type="button">Hábitos</button>
+        <button class="nav-btn" data-module="metas" type="button">Metas</button>
+      </nav>
+
+      <div id="feedbackBanner" class="banner hidden"></div>
+
+      <!-- MÓDULO CITAS -->
+      <section id="module-citas" class="module-panel">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Agendar nueva cita</h2>
+            <form id="citaForm" class="form">
+              <div class="field">
+                <label for="citaModalidad">Modalidad</label>
+                <select id="citaModalidad" required>
+                  <option value="VIRTUAL">VIRTUAL</option>
+                  <option value="PRESENCIAL">PRESENCIAL</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="citaTipo">Tipo</label>
+                <input id="citaTipo" type="text" required placeholder="PSICOLOGIA / TERAPIA" />
+              </div>
+              <div class="field">
+                <label for="citaMotivo">Motivo</label>
+                <input id="citaMotivo" type="text" required placeholder="Manejo de ansiedad y estrés" />
+              </div>
+              <div class="field">
+                <label for="citaFecha">Fecha y hora</label>
+                <input id="citaFecha" type="datetime-local" required />
+              </div>
+              <div class="field">
+                <label for="citaIdUsuario">ID Usuario</label>
+                <input id="citaIdUsuario" type="number" min="1" value="1" required />
+              </div>
+              <div class="field">
+                <label for="citaIdTerapeuta">ID Terapeuta</label>
+                <input id="citaIdTerapeuta" type="number" min="1" value="1" />
+              </div>
+              <button class="btn btn-primary" type="submit">Guardar cita</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Listado de citas</h2>
+              <div class="inline-actions">
+                <select id="filtroEstadoCita">
+                  <option value="">Todos los estados</option>
+                  <option value="PENDIENTE">PENDIENTE</option>
+                  <option value="REALIZADA">REALIZADA</option>
+                  <option value="CANCELADA">CANCELADA</option>
+                </select>
+                <button id="btnReloadCitas" class="btn btn-secondary" type="button">Actualizar</button>
+              </div>
+            </div>
+            <div id="citasList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO HÁBITOS -->
+      <section id="module-habitos" class="module-panel hidden">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Registrar hábito</h2>
+            <form id="habitoForm" class="form">
+              <div class="field">
+                <label for="habitoNombre">Nombre</label>
+                <input id="habitoNombre" type="text" required placeholder="Respiración consciente" />
+              </div>
+              <div class="field">
+                <label for="habitoDescripcion">Descripción</label>
+                <input id="habitoDescripcion" type="text" required placeholder="10 minutos antes de dormir" />
+              </div>
+              <div class="field">
+                <label for="habitoFrecuencia">Frecuencia</label>
+                <select id="habitoFrecuencia" required>
+                  <option value="DIARIA">DIARIA</option>
+                  <option value="SEMANAL">SEMANAL</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="habitoMetaDiaria">Meta diaria</label>
+                <input id="habitoMetaDiaria" type="text" required placeholder="1 sesión" />
+              </div>
+              <div class="field">
+                <label for="habitoIdCategoria">ID Categoría</label>
+                <input id="habitoIdCategoria" type="number" min="1" value="1" required />
+              </div>
+              <button class="btn btn-primary" type="submit">Guardar hábito</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Listado de hábitos</h2>
+              <button id="btnReloadHabitos" class="btn btn-secondary" type="button">Actualizar</button>
+            </div>
+            <div id="habitosList" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO METAS -->
+      <section id="module-metas" class="module-panel hidden">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Crear meta</h2>
+            <form id="metaForm" class="form">
+              <div class="field">
+                <label for="metaTitulo">Título de la meta</label>
+                <input id="metaTitulo" type="text" required placeholder="Dormir 7 horas diarias" />
+              </div>
+              <div class="field">
+                <label for="metaDescripcion">Descripción</label>
+                <input id="metaDescripcion" type="text" required placeholder="Apagar pantallas 45 min antes" />
+              </div>
+              <div class="field">
+                <label for="metaEstado">Estado</label>
+                <select id="metaEstado" required>
+                  <option value="PROGRAMADA">PROGRAMADA</option>
+                  <option value="EN_CURSO">EN_CURSO</option>
+                  <option value="CUMPLIDA">CUMPLIDA</option>
+                  <option value="VENCIDA">VENCIDA</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" type="submit">Guardar meta</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Listado de metas</h2>
+              <button id="btnReloadMetas" class="btn btn-secondary" type="button">Actualizar</button>
+            </div>
+            <div id="metasList" class="list"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
